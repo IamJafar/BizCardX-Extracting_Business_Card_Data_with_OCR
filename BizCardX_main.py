@@ -229,4 +229,14 @@ if selected == "Database":
         
 # MODIFY MENU    
 if selected == "Modify":
-    st.markdown("# in progress")
+    if st.button("# Select any field to modify"):
+      
+      def to_sql(df):
+        for i,row in df.iterrows():
+            #here %S means string values 
+            sql = "UPDATE card_data(company_name,card_holder,designation,mobile_number,email,website,area,city,state,pin_code,photo) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            mycursor.execute(sql, tuple(row))
+            # the connection is not auto committed by default, so we must commit to save our changes
+            mydb.commit()
+            df = pd.DataFrame(mycursor.fetchall(),columns= company_name,card_holder,designation,mobile_number,email,website,area,city,state,pin_code)
+            return df
